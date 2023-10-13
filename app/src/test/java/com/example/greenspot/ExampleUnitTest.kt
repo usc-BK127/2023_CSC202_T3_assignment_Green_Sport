@@ -1,4 +1,4 @@
-package com.example.csc202assignment
+package com.example.greenspot
 
 import org.junit.Test
 
