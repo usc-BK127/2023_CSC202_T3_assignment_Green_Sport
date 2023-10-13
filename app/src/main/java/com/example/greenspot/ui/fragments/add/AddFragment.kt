@@ -112,6 +112,7 @@ class AddFragment : Fragment(R.layout.fragment_add) {
                     addSpotToDatabase()
                 }
             }
+
         }
     }
 
