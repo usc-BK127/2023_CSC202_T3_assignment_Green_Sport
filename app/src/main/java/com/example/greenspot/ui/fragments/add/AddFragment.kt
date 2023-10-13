@@ -64,6 +64,33 @@ class AddFragment : Fragment(R.layout.fragment_add) {
     private fun actions(){
         binding.apply {
 
+            btnUpload.setOnClickListener {
+                if(PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)){
+                    selectImageRequest.launch(cropImageCameraOptions)
+                }else {
+                requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+                }
+            }
+
+            btnLocation.setOnClickListener {
+                if(PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)){
+                    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+
+                    fusedLocationClient.lastLocation.addOnSuccessListener { location : Location? ->
+                        lat = location?.latitude ?: 0.0
+                        lon = location?.longitude ?: 0.0
+                        etLocation.setText("Lat: $lat Lon: $lon")
+                        Log.d("Location: ", "Lat: $lat Lon: $lon")
+                    }.addOnFailureListener {
+                        Toast.makeText(requireContext(), "Location is not available in this time!", Toast.LENGTH_SHORT).show()
+                        Log.d("Location Error: ", fusedLocationClient.lastLocation.exception.toString())
+                    }
+
+                }else {
+                    requestPermissionLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }
+
             ivDate.setOnClickListener {
                 val datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select a date")
@@ -78,45 +105,6 @@ class AddFragment : Fragment(R.layout.fragment_add) {
                 }
 
                 datePicker.show(parentFragmentManager, "Date")
-            }
-
-            // This is the Image upload action
-            when (PackageManager.PERMISSION_GRANTED) {
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
-                -> {
-                    btnUpload.setOnClickListener {
-                        selectImageRequest.launch(cropImageCameraOptions)
-                    }
-                }
-                else -> {
-                    requestPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }
-            }
-
-            // This is the Location taking
-            when (PackageManager.PERMISSION_GRANTED) {
-                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                -> {
-                    btnLocation.setOnClickListener {
-                        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
-                        fusedLocationClient.lastLocation
-                            .addOnSuccessListener { location : Location? ->
-                                lat = location?.latitude ?: 0.0
-                                lon = location?.longitude ?: 0.0
-                                etLocation.setText("Lat: $lat Lon: $lon")
-                                Log.d("Location: ", "Lat: $lat Lon: $lon")
-                            }
-                            .addOnFailureListener {
-                                Toast.makeText(requireContext(), "Location is not available in this time!", Toast.LENGTH_SHORT).show()
-                                Log.d("Location Error: ", fusedLocationClient.lastLocation.exception.toString())
-                            }
-
-                    }
-                }
-                else -> {
-                    requestPermissionLocationLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
             }
 
             btnAddNew.setOnClickListener {

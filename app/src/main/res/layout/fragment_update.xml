@@ -85,7 +85,8 @@
         android:background="@null"
         app:layout_constraintBottom_toBottomOf="@+id/text_location"
         app:layout_constraintTop_toTopOf="@+id/text_location"
-        app:layout_constraintEnd_toEndOf="@id/text_location"/>
+        app:layout_constraintEnd_toEndOf="@id/text_location"
+        android:contentDescription="@string/location"/>
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -109,6 +110,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
+        android:visibility="gone"
         android:id="@+id/ivDate"
         android:layout_width="48dp"
         android:layout_height="48dp"
@@ -133,6 +135,7 @@
 
 
     <ImageButton
+        android:visibility="gone"
         android:id="@+id/btnUpload"
         android:layout_width="32dp"
         android:layout_height="32dp"
